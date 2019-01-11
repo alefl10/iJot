@@ -1,0 +1,11 @@
+{
+  "name": "ijot",
+  "version": "1.0.0",
+  "description": "App to jot down video ideas",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alejandro Ferrero",
+  "license": "ISC"
+}
