@@ -4,7 +4,7 @@
   "description": "App to jot down video ideas",
   "main": "app.js",
   "scripts": {
-    "start": "babel-node app.js",
+    "start": "nodemon --exec babel-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alejandro Ferrero",
@@ -19,7 +19,8 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.12.3"
+    "eslint-plugin-react": "^7.12.3",
+    "nodemon": "^1.18.9"
   },
   "dependencies": {
     "express": "^4.16.4"

@@ -5,5 +5,7 @@ module.exports = {
       "import/no-dynamic-require": 0,
       "func-names": ["error", "never"],
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "indent": [2, "tab"],
+      "no-tabs": 0,
     }
 };
