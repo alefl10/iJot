@@ -1,15 +1,23 @@
 import express from 'express';
+import hb from 'express-handlebars';
 
 const app = express();
 
-// Index Route
+// Handlebars Middleware
+app.engine('handlebars', hb({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
+// Index Route
 app.get('/', (req, res) => {
-	res.send('HOME');
+	const title = 'Welcome Alejandro';
+	res.render('index', {
+		title,
+	});
 });
 
+// About route
 app.get('/about', (req, res) => {
-	res.send('ABOUT');
+	res.render('about');
 });
 
 const port = 5000;
