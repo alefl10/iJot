@@ -1,7 +1,13 @@
 import express from 'express';
 import hb from 'express-handlebars';
+import mongoose from 'mongoose';
 
 const app = express();
+
+// Connect to mongoose
+mongoose.connect('mongodb://localhost/iJot-dev', { useNewUrlParser: true })
+	.then(() => console.log('MongoDB Connected...'))
+	.catch(err => console.log(err));
 
 // Handlebars Middleware
 app.engine('handlebars', hb({ defaultLayout: 'main' }));
