@@ -1,6 +1,7 @@
 import express from 'express';
 import hb from 'express-handlebars';
 import mongoose from 'mongoose';
+import './models/Idea';
 
 const app = express();
 
@@ -8,6 +9,9 @@ const app = express();
 mongoose.connect('mongodb://localhost/iJot-dev', { useNewUrlParser: true })
 	.then(() => console.log('MongoDB Connected...'))
 	.catch(err => console.log(err));
+
+// Load Idea Model
+const Idea = mongoose.model('ideas');
 
 // Handlebars Middleware
 app.engine('handlebars', hb({ defaultLayout: 'main' }));
@@ -24,6 +28,11 @@ app.get('/', (req, res) => {
 // About route
 app.get('/about', (req, res) => {
 	res.render('about');
+});
+
+// Add Idea form
+app.get('/ideas/add', (req, res) => {
+	res.render('ideas/add');
 });
 
 const port = 5000;
