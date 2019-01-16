@@ -35,6 +35,18 @@ app.get('/about', (req, res) => {
 	res.render('about');
 });
 
+// Idea Index Page
+app.get('/ideas', (req, res) => {
+	Idea.find({})
+		.sort({ date: 'desc' })
+		.then((ideas) => {
+			res.render('ideas/index', { ideas });
+		})
+		.catch((err) => {
+			res.send(err);
+		});
+});
+
 // Add Idea form
 app.get('/ideas/add', (req, res) => {
 	res.render('ideas/add');
@@ -57,7 +69,19 @@ app.post('/ideas/', (req, res) => {
 			details: req.body.details,
 		});
 	} else {
-		res.send('passed');
+		const newIdea = {
+			title: req.body.title,
+			details: req.body.details,
+		};
+
+		new Idea(newIdea)
+			.save()
+			.then((idea) => {
+				res.redirect('/ideas');
+			})
+			.catch((err) => {
+				errors.push({ text: 'Could not save idea to data base.\nSchema validation returned an error.' });
+			});
 	}
 });
 
