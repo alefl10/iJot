@@ -3,6 +3,8 @@ import hb from 'express-handlebars';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
+import flash from 'connect-flash';
+import session from 'express-session';
 import './models/Idea';
 
 const app = express();
@@ -25,6 +27,25 @@ app.use(bodyParser.json());
 
 // Mehod override Middleware
 app.use(methodOverride('_method'));
+
+// Express session Middleware
+app.use(session({
+	secret: 'secret', // This could be anything
+	resave: true,
+	saveUninitialized: true,
+}));
+
+// Flash Middleware
+app.use(flash());
+
+// Global variables
+app.use((req, res, next) => {
+	res.locals.success_msg = req.flash('success_msg');
+	res.locals.warning_msg = req.flash('warning_msg');
+	res.locals.error_msg = req.flash('error_msg');
+	res.locals.error = req.flash('error');
+	next();
+});
 
 // Index Route
 app.get('/', (req, res) => {
@@ -66,6 +87,8 @@ app.get('/ideas/edit/:id', (req, res) => {
 		})
 		.catch((err) => {
 			res.send(err);
+			req.flash('error_msg', 'Could not retrieve ideas from Data Base.');
+			res.redirect('/ideas');
 		});
 });
 
@@ -95,11 +118,13 @@ app.post('/ideas/', (req, res) => {
 			.save()
 			.then((idea) => {
 				console.log(idea);
+				req.flash('success_msg', 'Future idea posted!');
 				res.redirect('/ideas');
 			})
 			.catch((err) => {
 				console.log(err);
-				errors.push({ text: 'Could not save idea to data base.\nSchema validation returned an error.' });
+				req.flash('error_msg', 'Could not save idea to data base.\nSchema validation returned an error.');
+				res.redirect('/ideas');
 			});
 	}
 });
@@ -109,7 +134,7 @@ app.put('/ideas/:id', (req, res) => {
 	Idea.findOne({ _id: req.params.id })
 		.then((idea) => {
 			if (idea.title === req.body.title && idea.details === req.body.details) {
-				console.log('Nothing needs to be updated!');
+				req.flash('warning_msg', 'Nothing needs to be updated!');
 				res.redirect('/ideas');
 			} else {
 				const updateIdea = idea;
@@ -118,17 +143,20 @@ app.put('/ideas/:id', (req, res) => {
 				updateIdea.save()
 					.then((updatedIdea) => {
 						console.log(updatedIdea);
+						req.flash('success_msg', 'Future idea updated');
 						res.redirect('/ideas');
 					})
 					.catch((err) => {
 						console.log(err);
-						res.send({ text: 'Could not update idea.\nFailed to save to Data Base.' });
+						req.flash('error_msg', 'Could not update idea.\nFailed to save idea to Data Base.');
+						res.redirect('/ideas');
 					});
 			}
 		})
 		.catch((err) => {
 			console.log(err);
-			res.send({ text: 'Could not update idea.\nFailed find idea in Data Base.' });
+			req.flash('error_msg', 'Could not update idea.\nFailed to find idea in Data Base.');
+			res.redirect('/ideas');
 		});
 });
 
@@ -137,11 +165,13 @@ app.delete('/ideas/:id', (req, res) => {
 	Idea.deleteOne({ _id: req.params.id })
 		.then((deleted) => {
 			console.log(deleted);
+			req.flash('success_msg', 'Future idea deleted');
 			res.redirect('/ideas');
 		})
 		.catch((err) => {
 			console.log(err);
-			res.send({ text: 'Could not delete idea.' });
+			req.flash('error_msg', 'Future idea could not be deleted');
+			res.redirect('/ideas');
 		});
 });
 
