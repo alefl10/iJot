@@ -136,6 +136,18 @@ app.put('/ideas/:id', (req, res) => {
 		});
 });
 
+// Delete Idea
+app.delete('/ideas/:id', (req, res) => {
+	Idea.deleteOne({ _id: req.params.id })
+		.then((deleted) => {
+			console.log(deleted);
+			res.redirect('/ideas');
+		})
+		.catch((err) => {
+			console.log('There was an error', err);
+		});
+});
+
 const port = 5000;
 
 app.listen(port, () => {
