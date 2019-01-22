@@ -106,8 +106,6 @@ app.post('/ideas/', (req, res) => {
 
 // Edit Form process
 app.put('/ideas/:id', (req, res) => {
-	const errors = [];
-
 	Idea.findOne({ _id: req.params.id })
 		.then((idea) => {
 			if (idea.title === req.body.title && idea.details === req.body.details) {
@@ -123,16 +121,14 @@ app.put('/ideas/:id', (req, res) => {
 						res.redirect('/ideas');
 					})
 					.catch((err) => {
-						errors.push(err);
 						console.log(err);
-						errors.push({ text: 'Could not update idea.\nFailed to save to Data Base.' });
+						res.send({ text: 'Could not update idea.\nFailed to save to Data Base.' });
 					});
 			}
 		})
 		.catch((err) => {
-			errors.push(err);
 			console.log(err);
-			errors.push({ text: 'Could not update idea.\nFailed find idea in Data Base.' });
+			res.send({ text: 'Could not update idea.\nFailed find idea in Data Base.' });
 		});
 });
 
@@ -144,7 +140,8 @@ app.delete('/ideas/:id', (req, res) => {
 			res.redirect('/ideas');
 		})
 		.catch((err) => {
-			console.log('There was an error', err);
+			console.log(err);
+			res.send({ text: 'Could not delete idea.' });
 		});
 });
 
