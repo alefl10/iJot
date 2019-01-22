@@ -2,6 +2,7 @@ import express from 'express';
 import hb from 'express-handlebars';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import methodOverride from 'method-override';
 import './models/Idea';
 
 const app = express();
@@ -21,6 +22,9 @@ app.set('view engine', 'handlebars');
 // Body Parser Middleware + Parse application/json
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Mehod override Middleware
+app.use(methodOverride('_method'));
 
 // Index Route
 app.get('/', (req, res) => {
@@ -90,12 +94,46 @@ app.post('/ideas/', (req, res) => {
 		new Idea(newIdea)
 			.save()
 			.then((idea) => {
+				console.log(idea);
 				res.redirect('/ideas');
 			})
 			.catch((err) => {
+				console.log(err);
 				errors.push({ text: 'Could not save idea to data base.\nSchema validation returned an error.' });
 			});
 	}
+});
+
+// Edit Form process
+app.put('/ideas/:id', (req, res) => {
+	const errors = [];
+
+	Idea.findOne({ _id: req.params.id })
+		.then((idea) => {
+			if (idea.title === req.body.title && idea.details === req.body.details) {
+				console.log('Nothing needs to be updated!');
+				res.redirect('/ideas');
+			} else {
+				const updateIdea = idea;
+				updateIdea.title = req.body.title;
+				updateIdea.details = req.body.details;
+				updateIdea.save()
+					.then((updatedIdea) => {
+						console.log(updatedIdea);
+						res.redirect('/ideas');
+					})
+					.catch((err) => {
+						errors.push(err);
+						console.log(err);
+						errors.push({ text: 'Could not update idea.\nFailed to save to Data Base.' });
+					});
+			}
+		})
+		.catch((err) => {
+			errors.push(err);
+			console.log(err);
+			errors.push({ text: 'Could not update idea.\nFailed find idea in Data Base.' });
+		});
 });
 
 const port = 5000;
