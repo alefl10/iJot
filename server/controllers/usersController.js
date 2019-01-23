@@ -1,5 +1,5 @@
 exports.getLogin = (req, res) => {
-	res.send('login');
+	res.render('users/login');
 };
 
 exports.getRegister = (req, res) => {
