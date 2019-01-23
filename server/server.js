@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import mongoose from 'mongoose';
 import appMiddleware from './middleware/appMiddleware';
@@ -8,6 +9,9 @@ import './models/IdeaModel';
 const app = express();
 
 appMiddleware(app);
+
+// Static Folder
+app.use(express.static(path.join(__dirname, '../', 'public')));
 
 // Connect to mongoose
 mongoose.connect('mongodb://localhost/iJot-dev', { useNewUrlParser: true })
