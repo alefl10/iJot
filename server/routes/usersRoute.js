@@ -7,6 +7,8 @@ const router = express.Router();
 router.get('/login', controller.getLogin);
 
 // User Register Route
-router.get('/register', controller.getRegister);
+router.route('/register')
+	.get(controller.getRegister)
+	.post(controller.postRegister);
 
 export default router;
