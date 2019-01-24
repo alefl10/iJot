@@ -1,3 +1,7 @@
+import bcrypt from 'bcryptjs';
+import passport from 'passport';
+import User from '../models/UserModel';
+
 exports.getLogin = (req, res) => {
 	res.render('users/login');
 };
@@ -30,6 +34,37 @@ exports.postRegister = (req, res) => {
 			password2,
 		});
 	} else {
-		res.send('PASSED');
+		const newUser = new User({
+			name,
+			email,
+			password,
+		});
+
+		bcrypt.genSalt(10)
+			.then((salt) => {
+				bcrypt.hash(newUser.password, salt)
+					.then((hashedPassword) => {
+						newUser.password = hashedPassword;
+
+						newUser.save()
+							.then((user) => {
+								console.log(user);
+								req.flash('success_msg', 'You are now registered and can log in!');
+								res.redirect('/users/login');
+							})
+							.catch((err) => {
+								console.log(err);
+								res.send('There was an ERROR saving the user for registration.');
+							});
+					})
+					.catch((err) => {
+						console.log(err);
+						res.send('There was an ERROR hashing the password');
+					});
+			})
+			.catch((err) => {
+				console.log(err);
+				res.send('There was an ERROR salting the password.');
+			});
 	}
 };
