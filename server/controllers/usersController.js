@@ -54,7 +54,16 @@ exports.postRegister = (req, res) => {
 							})
 							.catch((err) => {
 								console.log(err);
-								res.send('There was an ERROR saving the user for registration.');
+								if (err.code === 11000) {
+									errors.push({ text: 'That email has already been used.\nPlease, choose a different email.' });
+									res.render('users/register', {
+										errors,
+										name,
+										email,
+										password,
+										password2,
+									});
+								}
 							});
 					})
 					.catch((err) => {
