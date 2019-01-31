@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import appMiddleware from './middleware/appMiddleware';
 import ideas from './routes/ideasRoute';
 import users from './routes/usersRoute';
+import { db } from '../config/database';
 
 const app = express();
 
@@ -13,7 +14,7 @@ appMiddleware(app);
 app.use(express.static(path.join(__dirname, '../', 'public')));
 
 // Connect to mongoose
-mongoose.connect('mongodb://localhost/iJot-dev', { useNewUrlParser: true })
+mongoose.connect(db.mongoURI, { useNewUrlParser: true })
 	.then(() => console.log('MongoDB Connected...'))
 	.catch(err => console.log(err));
 
