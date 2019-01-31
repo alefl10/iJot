@@ -3,8 +3,13 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import flash from 'connect-flash';
 import session from 'express-session';
+import passport from 'passport';
+import strategy from '../../config/passport';
 
 export default function (app) {
+	// Set up passport strategy
+	strategy(passport);
+
 	// Handlebars Middleware
 	app.engine('handlebars', hb({ defaultLayout: 'main' }));
 	app.set('view engine', 'handlebars');
@@ -23,6 +28,10 @@ export default function (app) {
 		saveUninitialized: true,
 	}));
 
+	// Passport middleware
+	app.use(passport.initialize());
+  	app.use(passport.session());
+
 	// Flash Middleware
 	app.use(flash());
 
@@ -32,6 +41,7 @@ export default function (app) {
 		res.locals.warning_msg = req.flash('warning_msg');
 		res.locals.error_msg = req.flash('error_msg');
 		res.locals.error = req.flash('error');
+		res.locals.user = req.user || null; // Determines whether a user is logged in or not
 		next();
 	});
 }
