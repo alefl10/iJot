@@ -49,20 +49,14 @@ exports.postRegister = (req, res) => {
 						newUser.save()
 							.then((user) => {
 								console.log(user);
-								req.flash('success_msg', 'You are now registered and can log in!');
+								req.flash('error_msg', 'You are now registered and can log in!');
 								res.redirect('/users/login');
 							})
 							.catch((err) => {
 								console.log(err);
 								if (err.code === 11000) {
-									errors.push({ text: 'That email has already been used.\nPlease, choose a different email.' });
-									res.render('users/register', {
-										errors,
-										name,
-										email,
-										password,
-										password2,
-									});
+									req.flash('success_msg', 'That email has already been used.\nPlease, choose a different email.');
+									res.redirect('/users/login');
 								}
 							});
 					})
