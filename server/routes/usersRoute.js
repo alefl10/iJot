@@ -4,7 +4,9 @@ import controller from '../controllers/usersController';
 const router = express.Router();
 
 // User Login Route
-router.get('/login', controller.getLogin);
+router.route('/login')
+	.get(controller.getLogin)
+	.post(controller.postLogin);
 
 // User Register Route
 router.route('/register')

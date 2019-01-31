@@ -6,6 +6,14 @@ exports.getLogin = (req, res) => {
 	res.render('users/login');
 };
 
+exports.postLogin = (req, res, next) => {
+	passport.authenticate('local', {
+		successRedirect: '/ideas',
+		failureRedirect: '/users/login',
+		failureFlash: true, // Show flash message if fail auth
+	})(req, res, next);
+};
+
 exports.getRegister = (req, res) => {
 	res.render('users/register');
 };
@@ -49,13 +57,13 @@ exports.postRegister = (req, res) => {
 						newUser.save()
 							.then((user) => {
 								console.log(user);
-								req.flash('error_msg', 'You are now registered and can log in!');
+								req.flash('success_msg', 'You are now registered and can log in!');
 								res.redirect('/users/login');
 							})
 							.catch((err) => {
 								console.log(err);
 								if (err.code === 11000) {
-									req.flash('success_msg', 'That email has already been used.\nPlease, choose a different email.');
+									req.flash('error_msg', 'That email has already been used.\nPlease, choose a different email.');
 									res.redirect('/users/login');
 								}
 							});
