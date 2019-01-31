@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost/iJot-dev', { useNewUrlParser: true })
 
 // Index Route
 app.get('/', (req, res) => {
-	const title = 'Welcome Alejandro';
+	const title = 'Welcome!';
 	res.render('index', {
 		title,
 	});

@@ -3,7 +3,7 @@ import Idea from '../models/IdeaModel';
 const controller = {
 
 	get(req, res) {
-		Idea.find({})
+		Idea.find({ user: req.user.id })
 			.sort({ date: 'desc' })
 			.then((ideas) => {
 				res.render('ideas/index', { ideas });
@@ -18,7 +18,12 @@ const controller = {
 			_id: req.params.id,
 		})
 			.then((idea) => {
-				res.render('ideas/edit', { idea });
+				if (idea.user !== req.user.id) {
+					req.flash('error_msg', 'You are not authorized to edit that idea!');
+					res.redirect('/ideas');
+				} else {
+					res.render('ideas/edit', { idea });
+				}
 			})
 			.catch((err) => {
 				res.send(err);
@@ -46,6 +51,7 @@ const controller = {
 			const newIdea = {
 				title: req.body.title,
 				details: req.body.details,
+				user: req.user.id,
 			};
 
 			new Idea(newIdea)
