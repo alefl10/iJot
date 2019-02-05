@@ -4,8 +4,11 @@
   "description": "App to jot down video ideas",
   "main": "app.js",
   "scripts": {
-    "start": "babel-node index.js",
-    "dev": "nodemon --exec babel-node index.js"
+    "dev": "nodemon --exec babel-node ./src/index.js",
+    "start": "npm run build && node ./build/index.js",
+    "build": "npm run clean && npm run babel-build",
+    "babel-build": "babel -d ./build ./src -s",
+    "clean": "rm -rf build && mkdir build"
   },
   "author": "Alejandro Ferrero",
   "license": "ISC",
