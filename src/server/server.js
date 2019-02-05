@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 import appMiddleware from './middleware/appMiddleware';
 import ideas from './routes/ideasRoute';
 import users from './routes/usersRoute';
-import { db } from '../config/database';
+
+const { db } = require('../config/database');
 
 const app = express();
 
