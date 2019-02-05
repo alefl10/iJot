@@ -5,7 +5,7 @@
 .pnp.js
 
 # private
-## /config/private.js
+/config/private.js
 
 # testing
 /coverage
