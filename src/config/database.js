@@ -1,9 +1,9 @@
-import { mlab } from './private';
+// const { mlab } = require('./private');
 
-if (process.env.node_env === 'production') {
+if (process.env.NODE_ENV === 'production') {
 	module.exports = {
 		db: {
-			mongoURI: `mongodb://${mlab.user}:${mlab.password}@ds125489.mlab.com:25489/ijot-prod`,
+			mongoURI: process.env.MONGODB_URI,
 		},
 	};
 } else {
