@@ -4,7 +4,7 @@
   "description": "App to jot down video ideas",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "babel-node index.js",
     "dev": "nodemon --exec babel-node index.js"
   },
   "author": "Alejandro Ferrero",
