@@ -12,7 +12,7 @@ const app = express();
 appMiddleware(app);
 
 // Static Folder
-app.use(express.static(path.join(__dirname, '../', 'public')));
+app.use(express.static(path.join(__dirname, '../..', 'public')));
 
 // Connect to mongoose
 mongoose.connect(db.mongoURI, { useNewUrlParser: true })
