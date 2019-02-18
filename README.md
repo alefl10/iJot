@@ -1,2 +1,2 @@
 # iJot
-Check the deployed app at https://ijot.herokuapp.com/
+Check out the deployed app at https://ijot.herokuapp.com/
